@@ -1,5 +1,7 @@
+import SidebarLayout from "./layout/SidebarLayout.jsx";
+
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return <SidebarLayout>hello world</SidebarLayout>;
 }
 
 export default App;
