@@ -23,3 +23,7 @@ export const insert = (name, datasourceId, choosedSubjects) => {
 
   localStorage.setItem("KRSPLAN_PLAN", JSON.stringify(plans));
 };
+
+export const get = () => {
+  return JSON.parse(localStorage.getItem("KRSPLAN_PLAN")) || [];
+};
