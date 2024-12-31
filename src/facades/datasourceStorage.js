@@ -11,7 +11,8 @@ export const insert = (name, data) => {
     datasource: data,
   };
 
-  const datasourceTemp = localStorage.getItem("KRSPLAN_DATASOURCE") || [];
+  const datasourceTemp =
+    JSON.parse(localStorage.getItem("KRSPLAN_DATASOURCE")) || [];
 
   datasourceTemp.push(result);
 

@@ -15,7 +15,7 @@ import { CiDatabase } from "react-icons/ci";
 import { GrPlan } from "react-icons/gr";
 import { BiTask } from "react-icons/bi";
 
-export function AppSidebar() {
+export function AppSidebar({ activePage }) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -26,16 +26,22 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive>
-                  <BiTask />
-                  Plan
-                </SidebarMenuButton>
+                <NavLink to="/">
+                  <SidebarMenuButton
+                    isActive={activePage === "plan" ? true : false}
+                  >
+                    <BiTask />
+                    Plan
+                  </SidebarMenuButton>
+                </NavLink>
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu>
               <SidebarMenuItem>
                 <NavLink to="/datasource">
-                  <SidebarMenuButton>
+                  <SidebarMenuButton
+                    isActive={activePage === "datasource" ? true : false}
+                  >
                     <CiDatabase />
                     Datasource
                   </SidebarMenuButton>
