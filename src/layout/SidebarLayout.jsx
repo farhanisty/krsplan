@@ -5,7 +5,7 @@ export default function SidebarLayout({ children }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="w-full overflow-x-hidden">
         <SidebarTrigger />
         {children}
       </main>
