@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { getById } from "./../facades/planStorage.js";
 import RenderBySubject from "./../fragments/plan/renderer/RenderBySubject";
 import RenderNonGrouped from "./../fragments/plan/renderer/RenderNonGrouped.jsx";
+import RenderByDay from "./../fragments/plan/renderer/RenderByDay.jsx";
 import {
   getEligibleSubjects,
   stringifySchedule,
@@ -158,7 +159,10 @@ export default function CanvasPlan() {
                     <PiStudent />
                     Lecturer
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setGroupBy("day")}
+                    disabled={groupBy === "day" ? true : false}
+                  >
                     <MdOutlineCalendarToday />
                     Day
                   </DropdownMenuItem>
@@ -175,6 +179,13 @@ export default function CanvasPlan() {
           )}
           {groupBy === "subject" && (
             <RenderBySubject
+              available={available}
+              subjects={plan.datasource.datasource}
+            />
+          )}
+
+          {groupBy === "day" && (
+            <RenderByDay
               available={available}
               subjects={plan.datasource.datasource}
             />
