@@ -48,3 +48,9 @@ export const get = () => {
 
   return mappedDatasources;
 };
+
+export const getById = (id) => {
+  return get().find((datasource) => {
+    return id === datasource.id;
+  });
+};

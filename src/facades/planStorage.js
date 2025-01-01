@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { getById as getDatasourceById } from "./datasourceStorage.js";
 
 export const insert = (name, datasourceId, choosedSubjects) => {
   const id = uuid();
@@ -26,4 +27,17 @@ export const insert = (name, datasourceId, choosedSubjects) => {
 
 export const get = () => {
   return JSON.parse(localStorage.getItem("KRSPLAN_PLAN")) || [];
+};
+
+export const getById = (id) => {
+  let findPlan = get().find((plan) => {
+    return id === plan.id;
+  });
+
+  findPlan = {
+    ...findPlan,
+    datasource: getDatasourceById(findPlan.datasourceId),
+  };
+
+  return findPlan;
 };
