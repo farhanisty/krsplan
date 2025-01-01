@@ -14,3 +14,7 @@ export function getEligibleSubjects(plan) {
     return false;
   });
 }
+
+export function stringifySchedule(schedule) {
+  return `${schedule.day} ${schedule.intervalTime.start.hour}:${schedule.intervalTime.start.minute}-${schedule.intervalTime.end.hour}:${schedule.intervalTime.end.minute}`;
+}
