@@ -39,7 +39,15 @@ const RenderBySubject = ({ available, subjects }) => {
               <AccordionContent>
                 <ul className="flex flex-col mt-2 gap-2">
                   {groupedItem.data.map((subject) => {
-                    return <SubjectItem key={subject.id} subject={subject} />;
+                    return (
+                      <SubjectItem key={subject.id} subject={subject}>
+                        <SubjectItem.Body>
+                          <SubjectItem.ActionButton>
+                            Choose
+                          </SubjectItem.ActionButton>
+                        </SubjectItem.Body>
+                      </SubjectItem>
+                    );
                   })}
                 </ul>
               </AccordionContent>

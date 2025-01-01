@@ -22,7 +22,9 @@ const ScheduleTable = ({ children }) => {
           {times.map((time) => {
             return (
               <li key={time} className="h-[40px] flex gap-3 items-center">
-                <time className="text-timelabel">{time}</time>
+                <time className="text-timelabel hover:text-red-800 ponter hover:text-lg hover:font-semibold">
+                  {time}
+                </time>
                 <div className="h-[1px] bg-timeline w-full"></div>
               </li>
             );

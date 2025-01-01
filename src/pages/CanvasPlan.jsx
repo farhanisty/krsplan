@@ -3,10 +3,8 @@ import { getById } from "./../facades/planStorage.js";
 import RenderBySubject from "./../fragments/plan/renderer/RenderBySubject";
 import RenderNonGrouped from "./../fragments/plan/renderer/RenderNonGrouped.jsx";
 import RenderByDay from "./../fragments/plan/renderer/RenderByDay.jsx";
-import {
-  getEligibleSubjects,
-  stringifySchedule,
-} from "./../facades/planUtil.js";
+import ChoosedRenderer from "./../fragments/plan/renderer/ChoosedRenderer.jsx";
+import PlanManager from "./../facades/PlanManager.js";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -38,20 +36,19 @@ import { Button } from "@/components/ui/button";
 
 export default function CanvasPlan() {
   const { id } = useParams();
-  const plan = getById(id);
+  const planManager = new PlanManager(id);
 
   const [groupBy, setGroupBy] = useState("none");
-  const [choosedSubjects, setChoosedSubjects] = useState(
-    getEligibleSubjects(plan),
-  );
+  const [available, setAvailable] = useState(planManager.available);
+  const [choosed, setChoosed] = useState(planManager.plan.data.choosed);
+  const [unavailable, setunavailable] = useState([]);
 
-  const [available, setAvailable] = useState(
-    choosedSubjects.map((s) => {
-      return s.id;
-    }),
-  );
+  const chooseAction = (id) => {
+    planManager.choose(id);
 
-  const [choosed, setChoosed] = useState(plan.data.choosed);
+    setChoosed(planManager.choosed);
+    setAvailable(planManager.available);
+  };
 
   return (
     <SidebarLayout>
@@ -63,30 +60,22 @@ export default function CanvasPlan() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{plan.name}</BreadcrumbPage>
+              <BreadcrumbPage>{planManager.plan.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
 
-      <ScheduleTableApp />
+      <ScheduleTableApp
+        choosed={choosed}
+        subjects={planManager.plan.datasource.datasource}
+      />
 
       <section className="flex my-5 mx-5 gap-3">
-        <div className="bg-slate-50 border flex-1 px-3 py-2">
-          <header className="text-slate-800">Choosed</header>
-          <ul className="flex flex-col gap-3">
-            <li className="bg-white px-3 py-2 shadow rounded border">
-              <h1 className="text-sm">Struktur Data</h1>
-              <time className="text-xs">Senin 07.00-10.30</time>
-              <h2 className="text-sm">Agus Sasmito</h2>
-            </li>
-            <li className="bg-white px-3 py-2 shadow rounded border">
-              <h1 className="text-sm">Struktur Data</h1>
-              <time className="text-xs">Senin 07.00-10.30</time>
-              <h2 className="text-sm">Agus Sasmito</h2>
-            </li>
-          </ul>
-        </div>
+        <ChoosedRenderer
+          choosed={choosed}
+          subjects={planManager.plan.datasource.datasource}
+        />
         <div className="bg-slate-50 border flex-1 px-3 py-2 max-h-[100vh] overflow-y-hidden">
           <header className="text-slate-800 pb-5 mb-3 border-b flex justify-between">
             <h1>Available</h1>
@@ -171,23 +160,27 @@ export default function CanvasPlan() {
             </div>
           </header>
 
+          <div>Total Item: {available.length}</div>
           {groupBy === "none" && (
             <RenderNonGrouped
               available={available}
-              subjects={plan.datasource.datasource}
+              subjects={planManager.plan.datasource.datasource}
+              chooseAction={chooseAction}
             />
           )}
           {groupBy === "subject" && (
             <RenderBySubject
               available={available}
-              subjects={plan.datasource.datasource}
+              subjects={planManager.plan.datasource.datasource}
+              chooseAction={chooseAction}
             />
           )}
 
           {groupBy === "day" && (
             <RenderByDay
               available={available}
-              subjects={plan.datasource.datasource}
+              subjects={planManager.plan.datasource.datasource}
+              chooseAction={chooseAction}
             />
           )}
         </div>

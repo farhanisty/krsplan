@@ -1,31 +1,68 @@
 import ScheduleTable from "@/components/ScheduleTable";
+import { Time } from "krsplan-engine";
 
-export default function ScheduleTableApp() {
-  const days = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
+const convertHeight = (subject) => {
+  const intervalTime = subject.schedule.intervalTime;
+  // const baseTime = new Time(7, 0);
+  return (
+    ((intervalTime.end.inMinute() - intervalTime.start.inMinute()) / 60) * 40
+  );
+};
+
+const convertTop = (subject) => {
+  const intervalTime = subject.schedule.intervalTime;
+  const baseTime = new Time(7, 30);
+  return ((intervalTime.start.inMinute() - baseTime.inMinute()) / 60) * 40 + 40;
+};
+
+export default function ScheduleTableApp({ choosed, subjects }) {
+  const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+  const subjectGroupedByDay = days.map((day) => {
+    return {
+      name: day,
+      data: [],
+    };
+  });
+
+  for (const a of choosed) {
+    const subject = subjects[a - 1];
+    subjectGroupedByDay[days.indexOf(subject.schedule.day)].data.push(subject);
+  }
 
   return (
     <ScheduleTable>
-      {days.map((day) => {
+      {days.map((day, index) => {
+        if (index === 5 && subjectGroupedByDay[5].data.length === 0) {
+          return;
+        }
+
         return (
           <ScheduleTable.DayItem key={day}>
             <ScheduleTable.DayHeader>{day}</ScheduleTable.DayHeader>
-            <ScheduleTable.DayBody>
-              <ScheduleTable.SubjectItem height={100} top={20}>
-                Hello world
-              </ScheduleTable.SubjectItem>
-
-              <ScheduleTable.SubjectItem height={70} top={120}>
-                <ScheduleTable.SubjectItem.Name>
-                  Struktur Data
-                </ScheduleTable.SubjectItem.Name>
-                <ScheduleTable.SubjectItem.Time>
-                  07.30-10.00 (3 SKS)
-                </ScheduleTable.SubjectItem.Time>
-                <ScheduleTable.SubjectItem.Lecturer>
-                  Agus Sasmito
-                </ScheduleTable.SubjectItem.Lecturer>
-              </ScheduleTable.SubjectItem>
-            </ScheduleTable.DayBody>
+            {subjectGroupedByDay.length > index && (
+              <ScheduleTable.DayBody>
+                {subjectGroupedByDay[index].data.map((subject) => {
+                  return (
+                    <ScheduleTable.SubjectItem
+                      key={subject.id}
+                      height={convertHeight(subject)}
+                      top={convertTop(subject)}
+                    >
+                      <ScheduleTable.SubjectItem.Name>
+                        {subject.name}
+                      </ScheduleTable.SubjectItem.Name>
+                      <ScheduleTable.SubjectItem.Time>
+                        07.30-10.00 ({subject.credits} SKS)
+                      </ScheduleTable.SubjectItem.Time>
+                      <ScheduleTable.SubjectItem.Lecturer>
+                        {subject.lecturers[0]}
+                      </ScheduleTable.SubjectItem.Lecturer>
+                    </ScheduleTable.SubjectItem>
+                  );
+                })}
+              </ScheduleTable.DayBody>
+            )}
           </ScheduleTable.DayItem>
         );
       })}

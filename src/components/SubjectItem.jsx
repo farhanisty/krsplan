@@ -5,7 +5,7 @@ import { FaRegBuilding } from "react-icons/fa";
 import { TiGroupOutline } from "react-icons/ti";
 import { Button } from "@/components/ui/button";
 
-export default function SubjectItem({ subject }) {
+const SubjectItem = ({ subject, children }) => {
   return (
     <li key={subject.id} className="bg-white px-3 py-2 shadow rounded border">
       <div className="border-b ">
@@ -41,10 +41,24 @@ export default function SubjectItem({ subject }) {
           </ul>
         </div>
       </div>
-
-      <div className="py-3">
-        <Button className="w-full bg-blue-400 hover:bg-blue-500">Choose</Button>
-      </div>
+      {children}
     </li>
   );
-}
+};
+
+const Body = ({ children }) => {
+  return <div className="py-3">{children}</div>;
+};
+
+const ActionButton = ({ children, ...props }) => {
+  return (
+    <Button className="w-full bg-blue-400 hover:bg-blue-500" {...props}>
+      {children}
+    </Button>
+  );
+};
+
+SubjectItem.Body = Body;
+SubjectItem.ActionButton = ActionButton;
+
+export default SubjectItem;
