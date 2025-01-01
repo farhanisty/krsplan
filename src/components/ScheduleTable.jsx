@@ -21,11 +21,11 @@ const ScheduleTable = ({ children }) => {
         <ul className="relative pt-[30px]">
           {times.map((time) => {
             return (
-              <li key={time} className="h-[40px] flex gap-3 items-center">
-                <time className="text-timelabel hover:text-red-800 ponter hover:text-lg hover:font-semibold">
+              <li key={time} className="h-[40px] flex gap-3 items-center group">
+                <time className="text-timelabel group-hover:text-red-600 group-hover:scale-125 cursor-pointer group-hover:font-semibold">
                   {time}
                 </time>
-                <div className="h-[1px] bg-timeline w-full"></div>
+                <div className="group-hover:bg-red-600 group-hover:h-[3px] h-[1px] bg-timeline w-full"></div>
               </li>
             );
           })}
