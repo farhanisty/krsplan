@@ -66,6 +66,27 @@ function Body({ datasource }) {
     return plan.datasourceId === datasource.id;
   });
 
+  const handleCompressAndDownload = async () => {
+    const text = JSON.stringify(datasource);
+    const textBlob = new Blob([text], { type: "text/plain" });
+
+    try {
+      const compressionStream = new CompressionStream("gzip");
+      const compressedStream = textBlob.stream().pipeThrough(compressionStream);
+
+      const compressedBlob = await new Response(compressedStream).blob();
+
+      const url = URL.createObjectURL(compressedBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${datasource.name}.krsource`;
+      a.click();
+      URL.revokeObjectURL(url); // Hapus URL untuk mencegah kebocoran memori
+    } catch (error) {
+      console.error("Compression failed:", error);
+    }
+  };
+
   return (
     <>
       <section className="px-5 py-3">
@@ -73,7 +94,13 @@ function Body({ datasource }) {
           <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>Export</MenubarItem>
+              <MenubarItem
+                onClick={() => {
+                  handleCompressAndDownload();
+                }}
+              >
+                Export
+              </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
@@ -82,7 +109,9 @@ function Body({ datasource }) {
               {plans.map((plan) => {
                 return (
                   <div key={plan.id}>
-                    <MenubarItem>Duplicate</MenubarItem>;
+                    <MenubarItem>
+                      <NavLink to={`/plan/${plan.id}`}>{plan.name}</NavLink>
+                    </MenubarItem>
                     <MenubarSeparator />
                   </div>
                 );
