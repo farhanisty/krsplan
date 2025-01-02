@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SubjectItem from "@/components/SubjectItem";
+import AvailableSubjectItem from "@/components/AvailableSubjectItem";
 
 const RenderNonGrouped = ({ available, subjects, chooseAction }) => {
   console.log(available);
@@ -9,20 +9,20 @@ const RenderNonGrouped = ({ available, subjects, chooseAction }) => {
 
   return (
     <ScrollArea className="h-[90%]">
-      <ul className="flex flex-col mt-2 gap-2">
+      <ul className="flex flex-wrap justify-between mt-2 gap-2">
         {results.map((subject) => {
           return (
-            <SubjectItem key={subject.id} subject={subject}>
-              <SubjectItem.Body>
-                <SubjectItem.ActionButton
-                  onClick={() => {
-                    chooseAction(subject.id);
-                  }}
-                >
-                  Choose
-                </SubjectItem.ActionButton>
-              </SubjectItem.Body>
-            </SubjectItem>
+            <div
+              key={subject.id}
+              style={{
+                width: "49%",
+              }}
+            >
+              <AvailableSubjectItem
+                subject={subject}
+                chooseAction={chooseAction}
+              />
+            </div>
           );
         })}
       </ul>

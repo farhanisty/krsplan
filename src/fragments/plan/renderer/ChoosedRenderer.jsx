@@ -1,12 +1,20 @@
 import SubjectItem from "@/components/SubjectItem";
+import { Button } from "@/components/ui/button";
+
 export default function ChoosedRenderer({ choosed, subjects }) {
   return (
     <div className="bg-slate-50 border flex-1 px-3 py-2">
-      <header className="text-slate-800">Choosed</header>
+      <header className="text-slate-800 pb-3 border-b mb-3">Choosed</header>
       <ul className="flex flex-col gap-3">
         {choosed.map((cId) => {
           return (
-            <SubjectItem key={cId} subject={subjects[cId - 1]}></SubjectItem>
+            <SubjectItem key={cId} subject={subjects[cId - 1]}>
+              <SubjectItem.Body>
+                <Button className="bg-red-400 hover:bg-red-500 w-full">
+                  Unchoose
+                </Button>
+              </SubjectItem.Body>
+            </SubjectItem>
           );
         })}
       </ul>

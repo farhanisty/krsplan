@@ -5,9 +5,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SubjectItem from "@/components/SubjectItem";
+import GroupedSubject from "@/components/GroupedSubject";
+import { splitArray } from "./../../../facades/util.js";
 
-const RenderBySubject = ({ available, subjects }) => {
+const RenderBySubject = ({ available, subjects, chooseAction }) => {
   const subjectsGroupName = [];
 
   for (const a of available) {
@@ -27,35 +28,23 @@ const RenderBySubject = ({ available, subjects }) => {
     }
   }
 
+  const [firstArray, secondArray] = splitArray(subjectsGroupName);
+
   return (
-    <ScrollArea className="h-[90%]">
-      <Accordion type="multiple" className="overflow-y-hidden" collapsible>
-        {subjectsGroupName.map((groupedItem) => {
-          return (
-            <AccordionItem key={groupedItem.name} value={groupedItem.name}>
-              <AccordionTrigger className="bg-white px-3 font-bold">
-                {groupedItem.name}
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="flex flex-col mt-2 gap-2">
-                  {groupedItem.data.map((subject) => {
-                    return (
-                      <SubjectItem key={subject.id} subject={subject}>
-                        <SubjectItem.Body>
-                          <SubjectItem.ActionButton>
-                            Choose
-                          </SubjectItem.ActionButton>
-                        </SubjectItem.Body>
-                      </SubjectItem>
-                    );
-                  })}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
-    </ScrollArea>
+    <div className="h-[90%] flex flex-row gap-2">
+      <ScrollArea className="flex-1">
+        <GroupedSubject
+          groupedSubjects={firstArray}
+          chooseAction={chooseAction}
+        />
+      </ScrollArea>
+      <ScrollArea className="flex-1">
+        <GroupedSubject
+          groupedSubjects={secondArray}
+          chooseAction={chooseAction}
+        />
+      </ScrollArea>
+    </div>
   );
 };
 

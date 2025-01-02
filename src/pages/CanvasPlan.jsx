@@ -76,9 +76,14 @@ export default function CanvasPlan() {
           choosed={choosed}
           subjects={planManager.plan.datasource.datasource}
         />
-        <div className="bg-slate-50 border flex-1 px-3 py-2 max-h-[100vh] overflow-y-hidden">
+        <div className="bg-slate-50 border w-3/4 px-3 py-2 h-[100vh] overflow-y-hidden">
           <header className="text-slate-800 pb-5 mb-3 border-b flex justify-between">
-            <h1>Available</h1>
+            <div>
+              <h1>Available</h1>
+              <span className="text-sm text-slate-500">
+                Total Item: {available.length}
+              </span>
+            </div>
             <div>
               <DropdownMenu>
                 <DropdownMenuTrigger
@@ -160,7 +165,6 @@ export default function CanvasPlan() {
             </div>
           </header>
 
-          <div>Total Item: {available.length}</div>
           {groupBy === "none" && (
             <RenderNonGrouped
               available={available}
@@ -183,9 +187,6 @@ export default function CanvasPlan() {
               chooseAction={chooseAction}
             />
           )}
-        </div>
-        <div className="bg-slate-50 border flex-1 px-3 py-2">
-          <header className="text-slate-800">Choosed</header>
         </div>
       </section>
     </SidebarLayout>
