@@ -25,6 +25,8 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { AiOutlineDelete, AiOutlineExport } from "react-icons/ai";
+import { GoPencil } from "react-icons/go";
 import { NavLink, useParams } from "react-router-dom";
 import { getById } from "./../facades/datasourceStorage.js";
 import { get as getPlans } from "./../facades/planStorage.js";
@@ -81,7 +83,7 @@ function Body({ datasource }) {
       a.href = url;
       a.download = `${datasource.name}.krsource`;
       a.click();
-      URL.revokeObjectURL(url); // Hapus URL untuk mencegah kebocoran memori
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Compression failed:", error);
     }
@@ -94,30 +96,44 @@ function Body({ datasource }) {
           <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem
-                onClick={() => {
-                  handleCompressAndDownload();
-                }}
-              >
-                Export
+              <MenubarItem onClick={handleCompressAndDownload}>
+                <button className="flex items-center gap-1 w-full">
+                  <AiOutlineExport />
+                  <span>Export</span>
+                </button>
+              </MenubarItem>
+              <MenubarItem onClick={handleCompressAndDownload}>
+                <button className="flex items-center gap-1 w-full">
+                  <GoPencil />
+                  <span>Rename</span>
+                </button>
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem onClick={handleCompressAndDownload}>
+                <button className="text-red-600 flex items-center gap-1 w-full">
+                  <AiOutlineDelete />
+                  <span>Delete</span>
+                </button>
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger>Plans</MenubarTrigger>
-            <MenubarContent>
-              {plans.map((plan) => {
-                return (
-                  <div key={plan.id}>
-                    <MenubarItem>
-                      <NavLink to={`/plan/${plan.id}`}>{plan.name}</NavLink>
-                    </MenubarItem>
-                    <MenubarSeparator />
-                  </div>
-                );
-              })}
-            </MenubarContent>
-          </MenubarMenu>
+          {plans.length > 0 && (
+            <MenubarMenu>
+              <MenubarTrigger>Plans</MenubarTrigger>
+              <MenubarContent>
+                {plans.map((plan) => {
+                  return (
+                    <div key={plan.id}>
+                      <MenubarItem>
+                        <NavLink to={`/plan/${plan.id}`}>{plan.name}</NavLink>
+                      </MenubarItem>
+                      <MenubarSeparator />
+                    </div>
+                  );
+                })}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
         </Menubar>
       </section>
       <section className="mx-5 my-3">
