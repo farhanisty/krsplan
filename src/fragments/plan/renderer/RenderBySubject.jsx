@@ -1,9 +1,3 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GroupedSubject from "@/components/GroupedSubject";
 import { splitArray } from "./../../../facades/util.js";

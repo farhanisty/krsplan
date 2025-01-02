@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { getById } from "./../facades/planStorage.js";
 import RenderBySubject from "./../fragments/plan/renderer/RenderBySubject";
 import RenderNonGrouped from "./../fragments/plan/renderer/RenderNonGrouped.jsx";
 import RenderByDay from "./../fragments/plan/renderer/RenderByDay.jsx";
+import RenderByLecturer from "./../fragments/plan/renderer/RenderByLecturer.jsx";
 import ChoosedRenderer from "./../fragments/plan/renderer/ChoosedRenderer.jsx";
 import PlanManager from "./../facades/PlanManager.js";
 import {
@@ -16,8 +16,6 @@ import {
 import SidebarLayout from "./../layout/SidebarLayout.jsx";
 import { useState, useEffect, useRef } from "react";
 import ScheduleTableApp from "./../fragments/plan/ScheduleTableApp";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { IoMdTime } from "react-icons/io";
 import { PiStudent } from "react-icons/pi";
 import { FaLayerGroup } from "react-icons/fa";
 import { RxValueNone } from "react-icons/rx";
@@ -157,7 +155,10 @@ export default function CanvasPlan() {
                     <TbMathFunction />
                     Subject
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setGroupBy("lecturer")}
+                    disabled={groupBy === "lecturer" ? true : false}
+                  >
                     <PiStudent />
                     Lecturer
                   </DropdownMenuItem>
@@ -187,7 +188,13 @@ export default function CanvasPlan() {
               chooseAction={chooseAction}
             />
           )}
-
+          {groupBy === "lecturer" && (
+            <RenderByLecturer
+              available={available}
+              subjects={planManager.plan.datasource.datasource}
+              chooseAction={chooseAction}
+            />
+          )}
           {groupBy === "day" && (
             <RenderByDay
               available={available}
