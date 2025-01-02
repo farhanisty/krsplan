@@ -4,7 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { NavLink } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { MdNavigateNext } from "react-icons/md";
 
@@ -23,9 +23,11 @@ export default function DatasourceItem({ datasourceProperty }) {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <div className="p-2 rounded-full bg-slate-200">
-              <MdNavigateNext className="text-2xl" />
-            </div>
+            <NavLink to={datasourceProperty.id}>
+              <div className="p-2 rounded-full bg-slate-200">
+                <MdNavigateNext className="text-2xl" />
+              </div>
+            </NavLink>
           </TooltipTrigger>
           <TooltipContent>
             <p>More Action</p>

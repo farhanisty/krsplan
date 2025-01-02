@@ -3,6 +3,7 @@ import Plan from "./pages/Plan.jsx";
 import CreatePlan from "./pages/CreatePlan.jsx";
 import CanvasPlan from "./pages/CanvasPlan.jsx";
 import Datasource from "./pages/Datasource.jsx";
+import DetailDatasource from "./pages/DetailDatasource.jsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/plan/create" element={<CreatePlan />} />
         <Route path="/plan/:id" element={<CanvasPlan />} />
         <Route path="/datasource" element={<Datasource />} />
+        <Route path="/datasource/:id" element={<DetailDatasource />} />
       </Routes>
     </Router>
   );
