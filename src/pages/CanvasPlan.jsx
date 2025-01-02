@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { NavLink } from "react-router-dom";
 
 export default function CanvasPlan() {
   const { id } = useParams();
@@ -61,7 +62,7 @@ export default function CanvasPlan() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Plan</BreadcrumbLink>
+              <NavLink to="/">Plan</NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

@@ -12,6 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { get } from "./../facades/datasourceStorage.js";
+import { NavLink } from "react-router-dom";
 
 export default function Datasource() {
   const localStorageDatasources = get();
@@ -26,13 +27,17 @@ export default function Datasource() {
 
   const [datasource, setDatasource] = useState(datasourceFormatMapped);
 
+  const updateDatasourceState = (ds) => {
+    setDatasource(ds);
+  };
+
   return (
     <SidebarLayout activePage="datasource">
       <header className="my-3 mx-5">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Datasource</BreadcrumbLink>
+              <NavLink to="/datasource">Datasource</NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -65,7 +70,7 @@ export default function Datasource() {
           </DatasourceLayout>
         </div>
         <div className="flex-1 p-2">
-          <CreateDatasource></CreateDatasource>
+          <CreateDatasource updateDatasourceState={updateDatasourceState} />
         </div>
       </div>
     </SidebarLayout>

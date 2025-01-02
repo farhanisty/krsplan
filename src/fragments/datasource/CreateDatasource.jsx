@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { insert } from "./../../facades/datasourceStorage.js";
+import { insert, get } from "./../../facades/datasourceStorage.js";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export default function CreateDatasource() {
+export default function CreateDatasource({ updateDatasourceState }) {
   const nameRef = useRef(null);
   const dataRef = useRef(null);
   const dialogTriggerRef = useRef(null);
@@ -55,6 +55,7 @@ export default function CreateDatasource() {
     setDatasources([]);
     nameRef.current.value = "";
     dataRef.current.value = "";
+    updateDatasourceState(get());
   };
 
   return (
