@@ -50,6 +50,13 @@ export default function CanvasPlan() {
     setAvailable(planManager.available);
   };
 
+  const unchooseAction = (id) => {
+    planManager.unchoose(id);
+
+    setChoosed(planManager.choosed);
+    setAvailable(planManager.available);
+  };
+
   return (
     <SidebarLayout>
       <header className="my-3 mx-5">
@@ -75,6 +82,7 @@ export default function CanvasPlan() {
         <ChoosedRenderer
           choosed={choosed}
           subjects={planManager.plan.datasource.datasource}
+          unchooseAction={unchooseAction}
         />
         <div className="bg-slate-50 border w-3/4 px-3 py-2 h-[100vh] overflow-y-hidden">
           <header className="text-slate-800 pb-5 mb-3 border-b flex justify-between">

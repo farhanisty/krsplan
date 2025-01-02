@@ -2,7 +2,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import AvailableSubjectItem from "@/components/AvailableSubjectItem";
 
 const RenderNonGrouped = ({ available, subjects, chooseAction }) => {
-  console.log(available);
   const results = available.map((a) => {
     return subjects[a - 1];
   });

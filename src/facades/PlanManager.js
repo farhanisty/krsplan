@@ -56,7 +56,53 @@ export default class PlanManger {
     this.commit();
   }
 
+  unchoose(id) {
+    const newChoosed = this.choosed.filter((i) => {
+      return i != id;
+    });
+
+    const eligibleSubjects = [...this.unavailable];
+
+    console.log(eligibleSubjects, newChoosed);
+
+    const newAvailable = [id, ...this.available];
+    const newUnavailable = [];
+
+    const eliminators = newChoosed.map((id) => {
+      return this.getEliminator(this.subjects[id - 1]);
+    });
+
+    for (const eId of eligibleSubjects) {
+      const subject = this.subjects[eId - 1];
+      let result = true;
+
+      for (const eliminator of eliminators) {
+        const reason = [];
+
+        eliminator.execute(subject, reason);
+
+        if (reason.length > 0) {
+          result = false;
+          break;
+        }
+      }
+
+      if (result) {
+        newAvailable.push(eId);
+      } else {
+        newUnavailable.push(eId);
+      }
+    }
+
+    this.setChoosed(newChoosed);
+    this.setAvailable(newAvailable);
+    this.setUnavailable(newUnavailable);
+
+    this.commit();
+  }
+
   setAvailable(newAvailable) {
+    newAvailable.sort((a, b) => a - b);
     this.plan.data.available = newAvailable;
     this.available = newAvailable;
   }
