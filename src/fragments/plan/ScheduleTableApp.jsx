@@ -15,6 +15,12 @@ const convertTop = (subject) => {
   return ((intervalTime.start.inMinute() - baseTime.inMinute()) / 60) * 40 + 40;
 };
 
+const stringifySchedule = (schedule) => {
+  const start = schedule.intervalTime.start;
+  const end = schedule.intervalTime.end;
+  return `${start.hour}:${start.minute}-${end.hour}:${end.minute}`;
+};
+
 export default function ScheduleTableApp({ choosed, subjects }) {
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -53,7 +59,8 @@ export default function ScheduleTableApp({ choosed, subjects }) {
                         {subject.name}
                       </ScheduleTable.SubjectItem.Name>
                       <ScheduleTable.SubjectItem.Time>
-                        07.30-10.00 ({subject.credits} SKS)
+                        {stringifySchedule(subject.schedule)} ({subject.credits}{" "}
+                        SKS)
                       </ScheduleTable.SubjectItem.Time>
                       <ScheduleTable.SubjectItem.Lecturer>
                         {subject.lecturers[0]}

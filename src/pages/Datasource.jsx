@@ -11,25 +11,20 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { get } from "./../facades/datasourceStorage.js";
 
 export default function Datasource() {
-  const [datasource, setDatasource] = useState([]);
+  const localStorageDatasources = get();
+  const datasourceFormatMapped = localStorageDatasources.map((item) => {
+    return {
+      id: item.id,
+      name: item.name,
+      createdAt: item.createdAt,
+      total: item.datasource.length,
+    };
+  });
 
-  useEffect(() => {
-    const localStorageItems =
-      JSON.parse(localStorage.getItem("KRSPLAN_DATASOURCE")) || [];
-
-    const datasourceFormatMapped = localStorageItems.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        createdAt: item.createdAt,
-        total: item.datasource.length,
-      };
-    });
-
-    setDatasource(datasourceFormatMapped);
-  }, []);
+  const [datasource, setDatasource] = useState(datasourceFormatMapped);
 
   return (
     <SidebarLayout activePage="datasource">
@@ -52,16 +47,20 @@ export default function Datasource() {
           <DatasourceLayout>
             <DatasourceLayout.Header>All</DatasourceLayout.Header>
             <DatasourceLayout.Body>
-              <ul className="mt-5 flex flex-col gap-3">
-                {datasource.map((datasource) => {
-                  return (
-                    <DatasourceItem
-                      key={datasource.name}
-                      datasourceProperty={datasource}
-                    />
-                  );
-                })}
-              </ul>
+              {datasource.length === 0 ? (
+                <p className="text-center text-slate-600">Empty!</p>
+              ) : (
+                <ul className="mt-5 flex flex-col gap-3">
+                  {datasource.map((datasource) => {
+                    return (
+                      <DatasourceItem
+                        key={datasource.name}
+                        datasourceProperty={datasource}
+                      />
+                    );
+                  })}
+                </ul>
+              )}
             </DatasourceLayout.Body>
           </DatasourceLayout>
         </div>

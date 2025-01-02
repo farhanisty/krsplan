@@ -39,9 +39,8 @@ export const insert = (name, datasourceId, choosedSubjects) => {
     return a.id;
   });
 
-  const plans = JSON.parse(localStorage.getItem("KRSPLAN_PLAN")) || [];
-
-  plans.push(result);
+  let plans = get();
+  plans = [result, ...plans];
 
   localStorage.setItem(
     "KRSPLAN_PLAN",
@@ -52,11 +51,11 @@ export const insert = (name, datasourceId, choosedSubjects) => {
 export const update = (id, plan) => {
   const plans = get();
 
-  const filteredPlans = plans.filter((p) => {
+  let filteredPlans = plans.filter((p) => {
     return p.id != id;
   });
 
-  filteredPlans.push(plan);
+  filteredPlans = [plan, ...filteredPlans];
 
   localStorage.setItem(
     "KRSPLAN_PLAN",

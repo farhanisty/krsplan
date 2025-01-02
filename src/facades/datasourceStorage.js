@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { Schedule, IntervalTime, Time } from "krsplan-engine";
+import LZString from "lz-string";
 
 export const insert = (name, data) => {
   const id = uuid();
@@ -12,17 +13,24 @@ export const insert = (name, data) => {
     datasource: data,
   };
 
-  const datasourceTemp =
-    JSON.parse(localStorage.getItem("KRSPLAN_DATASOURCE")) || [];
+  let datasourceTemp = get();
 
-  datasourceTemp.push(result);
+  datasourceTemp = [result, ...datasourceTemp];
 
-  localStorage.setItem("KRSPLAN_DATASOURCE", JSON.stringify(datasourceTemp));
+  localStorage.setItem(
+    "KRSPLAN_DATASOURCE",
+    LZString.compress(JSON.stringify(datasourceTemp)),
+  );
 };
 
 export const get = () => {
-  const datasources =
-    JSON.parse(localStorage.getItem("KRSPLAN_DATASOURCE")) || [];
+  let datasources = localStorage.getItem("KRSPLAN_DATASOURCE");
+
+  if (datasources) {
+    datasources = JSON.parse(LZString.decompress(datasources));
+  } else {
+    datasources = [];
+  }
 
   const mappedDatasources = datasources.map((ds) => {
     return {
