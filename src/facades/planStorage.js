@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { getById as getDatasourceById } from "./datasourceStorage.js";
 import { UnchoosedSubjectEliminator } from "krsplan-engine";
+import LZString from "lz-string";
 
 export const insert = (name, datasourceId, choosedSubjects) => {
   const id = uuid();
@@ -42,11 +43,14 @@ export const insert = (name, datasourceId, choosedSubjects) => {
 
   plans.push(result);
 
-  localStorage.setItem("KRSPLAN_PLAN", JSON.stringify(plans));
+  localStorage.setItem(
+    "KRSPLAN_PLAN",
+    LZString.compress(JSON.stringify(plans)),
+  );
 };
 
 export const update = (id, plan) => {
-  const plans = JSON.parse(localStorage.getItem("KRSPLAN_PLAN")) || [];
+  const plans = get();
 
   const filteredPlans = plans.filter((p) => {
     return p.id != id;
@@ -54,11 +58,22 @@ export const update = (id, plan) => {
 
   filteredPlans.push(plan);
 
-  localStorage.setItem("KRSPLAN_PLAN", JSON.stringify(filteredPlans));
+  localStorage.setItem(
+    "KRSPLAN_PLAN",
+    LZString.compress(JSON.stringify(filteredPlans)),
+  );
 };
 
 export const get = () => {
-  return JSON.parse(localStorage.getItem("KRSPLAN_PLAN")) || [];
+  let localStorageData = localStorage.getItem("KRSPLAN_PLAN");
+  if (localStorageData) {
+    localStorageData = JSON.parse(
+      LZString.decompress(localStorage.getItem("KRSPLAN_PLAN")),
+    );
+  } else {
+    localStorageData = [];
+  }
+  return localStorageData;
 };
 
 export const getById = (id) => {

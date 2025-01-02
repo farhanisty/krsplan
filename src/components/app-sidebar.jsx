@@ -19,7 +19,7 @@ export function AppSidebar({ activePage }) {
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1>Maxwell Demon Dev</h1>
+        <h1 className="font-semibold text-slate-600">KRSPLAN</h1>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

@@ -92,46 +92,6 @@ export default function CanvasPlan() {
             </div>
             <div>
               <DropdownMenu>
-                <DropdownMenuTrigger
-                  disabled={groupBy !== "none" ? true : false}
-                >
-                  <Button
-                    variant="outline"
-                    className="text-xs"
-                    disabled={groupBy !== "none" ? true : false}
-                  >
-                    <MdOutlineSort className="text-sm" />
-                    Sort by :{" "}
-                    <span className="text-slate-500 capitalize">{groupBy}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => setGroupBy("none")}
-                    disabled={groupBy === "none" ? true : false}
-                  >
-                    <RxValueNone />
-                    None
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => setGroupBy("subject")}
-                    disabled={groupBy === "subject" ? true : false}
-                  >
-                    <TbMathFunction />
-                    Subject
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <PiStudent />
-                    Lecturer
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <MdOutlineCalendarToday />
-                    Day
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button variant="outline" className="text-xs">
                     <FaLayerGroup className="text-sm" />
