@@ -2,6 +2,13 @@ import { v4 as uuid } from "uuid";
 import { Schedule, IntervalTime, Time } from "krsplan-engine";
 import LZString from "lz-string";
 
+const commit = (datasources) => {
+  localStorage.setItem(
+    "KRSPLAN_DATASOURCE",
+    LZString.compress(JSON.stringify(datasources)),
+  );
+};
+
 export const insert = (name, data) => {
   const id = uuid();
   const date = new Date();
@@ -21,6 +28,14 @@ export const insert = (name, data) => {
     "KRSPLAN_DATASOURCE",
     LZString.compress(JSON.stringify(datasourceTemp)),
   );
+};
+
+export const remove = (id) => {
+  const datasources = get().filter((ds) => {
+    return ds.id !== id;
+  });
+
+  commit(datasources);
 };
 
 export const get = () => {

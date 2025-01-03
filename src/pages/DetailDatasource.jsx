@@ -25,10 +25,22 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useRef } from "react";
 import { AiOutlineDelete, AiOutlineExport } from "react-icons/ai";
 import { GoPencil } from "react-icons/go";
-import { NavLink, useParams } from "react-router-dom";
-import { getById } from "./../facades/datasourceStorage.js";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { getById, remove } from "./../facades/datasourceStorage.js";
 import { get as getPlans } from "./../facades/planStorage.js";
 
 export default function DetailDatasource() {
@@ -40,7 +52,6 @@ export default function DetailDatasource() {
     <SidebarLayout>
       <Header datasource={datasource} />
       <Body datasource={datasource} />
-      <h1>hello world</h1>
     </SidebarLayout>
   );
 }
@@ -64,6 +75,8 @@ function Header({ datasource }) {
 }
 
 function Body({ datasource }) {
+  const deleteAlertRef = useRef(null);
+  const navigate = useNavigate();
   const plans = getPlans().filter((plan) => {
     return plan.datasourceId === datasource.id;
   });
@@ -109,14 +122,47 @@ function Body({ datasource }) {
                 </button>
               </MenubarItem>
               <MenubarSeparator />
-              <MenubarItem onClick={handleCompressAndDownload}>
-                <button className="text-red-600 flex items-center gap-1 w-full">
+              <MenubarItem
+                disabled={plans.length > 0 ? true : false}
+                onClick={() => {
+                  deleteAlertRef.current.click();
+                }}
+              >
+                <button
+                  disabled={plans.length > 0 ? true : false}
+                  className="text-red-600 flex items-center gap-1 w-full h-full cursor-pointer hover:font-semibold hover:text-red-600"
+                >
                   <AiOutlineDelete />
                   <span>Delete</span>
                 </button>
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
+
+          <AlertDialog>
+            <AlertDialogTrigger ref={deleteAlertRef}></AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  this datasource.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    remove(datasource.id);
+                    navigate("/datasource");
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           {plans.length > 0 && (
             <MenubarMenu>
               <MenubarTrigger>Plans</MenubarTrigger>
