@@ -41,8 +41,6 @@ export default function Datasource() {
   const [importDatasource, setImportDatasource] = useState(null);
   const [inputImportedName, setInputImportedName] = useState("");
 
-  const inputImportedNameRef = useRef(null);
-
   const handleImportDatasource = async (e) => {
     const file = e.target.files[0];
 
@@ -91,6 +89,8 @@ export default function Datasource() {
     console.log(JSON.stringify(importDatasource.datasource));
     insert(inputImportedName, importDatasource.datasource);
     setDatasource(get());
+    setInputImportedName("");
+    setImportDatasource(null);
   };
 
   const updateDatasourceState = (ds) => {
@@ -134,7 +134,6 @@ export default function Datasource() {
                     <Label className="mb-3 block">Datasource name</Label>
                     <Input
                       type="text"
-                      ref={inputImportedNameRef}
                       value={inputImportedName}
                       onChange={(e) => {
                         setInputImportedName(e.target.value);
