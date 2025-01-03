@@ -77,7 +77,7 @@ export default function CanvasPlan() {
         subjects={planManager.plan.datasource.datasource}
       />
 
-      <section className="flex my-5 mx-5 gap-3">
+      <section className="flex my-5 mx-5 gap-3 h-[100vh] bg-slate-50 overflow-y-hidden">
         <ChoosedRenderer
           choosed={choosed}
           subjects={planManager.plan.datasource.datasource}

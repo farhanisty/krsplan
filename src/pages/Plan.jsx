@@ -26,7 +26,7 @@ export default function Plan() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Plan</BreadcrumbLink>
+              <NavLink to="/">Plan</NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

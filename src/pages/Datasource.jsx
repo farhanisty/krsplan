@@ -2,7 +2,7 @@ import SidebarLayout from "./../layout/SidebarLayout.jsx";
 import DatasourceLayout from "./../layout/DatasourceLayout.jsx";
 import DatasourceItem from "./../components/DatasourceItem";
 import CreateDatasource from "./../fragments/datasource/CreateDatasource";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,8 +11,20 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { get } from "./../facades/datasourceStorage.js";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { get, insert } from "./../facades/datasourceStorage.js";
 import { NavLink } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { stringify, parse } from "flatted";
 
 export default function Datasource() {
   const localStorageDatasources = get();
@@ -26,6 +38,60 @@ export default function Datasource() {
   });
 
   const [datasource, setDatasource] = useState(datasourceFormatMapped);
+  const [importDatasource, setImportDatasource] = useState(null);
+  const [inputImportedName, setInputImportedName] = useState("");
+
+  const inputImportedNameRef = useRef(null);
+
+  const handleImportDatasource = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      console.error("Tidak ada file yang dipilih.");
+      return;
+    }
+
+    if (!window.DecompressionStream) {
+      console.error("DecompressionStream tidak didukung di browser ini.");
+      return;
+    }
+
+    try {
+      const decompressionStream = new DecompressionStream("gzip");
+      const readableStream = file.stream().pipeThrough(decompressionStream);
+
+      const reader = readableStream.getReader();
+      const decoder = new TextDecoder();
+      let result = "";
+      let done = false;
+
+      while (!done) {
+        const { value, done: isDone } = await reader.read();
+        done = isDone;
+        if (value) {
+          result += decoder.decode(value, { stream: true });
+        }
+      }
+
+      result += decoder.decode();
+
+      try {
+        const jsonData = JSON.parse(result);
+        setImportDatasource(jsonData);
+        setInputImportedName(jsonData.name);
+      } catch (parseError) {
+        console.log(parseError);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSaveImport = () => {
+    console.log(JSON.stringify(importDatasource.datasource));
+    insert(inputImportedName, importDatasource.datasource);
+    setDatasource(get());
+  };
 
   const updateDatasourceState = (ds) => {
     setDatasource(ds);
@@ -46,6 +112,45 @@ export default function Datasource() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+
+      <section className="mx-5">
+        <Dialog>
+          <DialogTrigger>
+            <Button>Import</Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>Import Datasource</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              <Label className="mb-3 block">
+                File(must be .krsource extension)
+              </Label>
+              <Input type="file" onChange={handleImportDatasource}></Input>
+
+              {importDatasource !== null && (
+                <>
+                  <div className="mt-5">
+                    <Label className="mb-3 block">Datasource name</Label>
+                    <Input
+                      type="text"
+                      ref={inputImportedNameRef}
+                      value={inputImportedName}
+                      onChange={(e) => {
+                        setInputImportedName(e.target.value);
+                      }}
+                    />
+                  </div>
+
+                  <div className="mt-5">
+                    <Button onClick={handleSaveImport}>Save</Button>
+                  </div>
+                </>
+              )}
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+      </section>
 
       <div className="w-full px-5 flex my-10">
         <div className="flex-1 p-2">
