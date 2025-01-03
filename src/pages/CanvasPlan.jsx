@@ -1,10 +1,28 @@
-import { useParams } from "react-router-dom";
 import RenderBySubject from "./../fragments/plan/renderer/RenderBySubject";
 import RenderNonGrouped from "./../fragments/plan/renderer/RenderNonGrouped.jsx";
 import RenderByDay from "./../fragments/plan/renderer/RenderByDay.jsx";
 import RenderByLecturer from "./../fragments/plan/renderer/RenderByLecturer.jsx";
 import ChoosedRenderer from "./../fragments/plan/renderer/ChoosedRenderer.jsx";
 import PlanManager from "./../facades/PlanManager.js";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +31,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 import SidebarLayout from "./../layout/SidebarLayout.jsx";
 import { useState, useEffect, useRef } from "react";
 import ScheduleTableApp from "./../fragments/plan/ScheduleTableApp";
@@ -21,7 +48,7 @@ import { FaLayerGroup } from "react-icons/fa";
 import { RxValueNone } from "react-icons/rx";
 import { TbMathFunction } from "react-icons/tb";
 import { MdOutlineCalendarToday } from "react-icons/md";
-import { MdOutlineSort } from "react-icons/md";
+import { HiOutlineDuplicate } from "react-icons/hi";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,16 +58,37 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router-dom";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
+import { AiOutlineDelete, AiOutlineExport } from "react-icons/ai";
+import { remove, get, insert } from "./../facades/planStorage.js";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const getSimiliarPlans = (id, datasourceId) => {
+  return get().filter((p) => {
+    return p.datasourceId === datasourceId && p.id != id;
+  });
+};
 
 export default function CanvasPlan() {
   const { id } = useParams();
   const planManager = new PlanManager(id);
+  const navigate = useNavigate();
 
+  const [similarPlans, setSimilarPlans] = useState(
+    getSimiliarPlans(id, planManager.plan.datasourceId),
+  );
+  const [openDuplicateDialog, setOpenDuplicateDialog] = useState(false);
   const [groupBy, setGroupBy] = useState("none");
   const [available, setAvailable] = useState(planManager.available);
   const [choosed, setChoosed] = useState(planManager.plan.data.choosed);
   const [unavailable, setunavailable] = useState([]);
+  const [duplicateName, setDuplicateName] = useState(
+    `${planManager.plan.name} - copy`,
+  );
+
+  const deleteAlertRef = useRef(null);
+  const duplicateAlertRef = useRef(null);
 
   const chooseAction = (id) => {
     planManager.choose(id);
@@ -71,6 +119,126 @@ export default function CanvasPlan() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+      <section className="mx-5">
+        <Menubar className="w-min">
+          <MenubarMenu>
+            <MenubarTrigger>File</MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem
+                onClick={() => {
+                  setOpenDuplicateDialog(true);
+                }}
+              >
+                <button className="flex items-center gap-1 w-full">
+                  <HiOutlineDuplicate></HiOutlineDuplicate>
+                  <span>Duplicate</span>
+                </button>
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem>
+                <button
+                  onClick={() => {
+                    deleteAlertRef.current.click();
+                  }}
+                  className="text-red-600 flex items-center gap-1 w-full h-full cursor-pointer hover:font-semibold hover:text-red-600"
+                >
+                  <AiOutlineDelete />
+                  <span>Delete</span>
+                </button>
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+          {similarPlans.length > 0 && (
+            <MenubarMenu>
+              <MenubarTrigger>Similar</MenubarTrigger>
+              <MenubarContent>
+                {similarPlans.map((p) => {
+                  return (
+                    <>
+                      <MenubarItem key={p.id}>
+                        <a href={`/plan/${p.id}`}>
+                          <button className="flex items-center gap-1 w-full">
+                            <span>{p.name}</span>
+                          </button>
+                        </a>
+                      </MenubarItem>
+                      <MenubarSeparator />
+                    </>
+                  );
+                })}
+              </MenubarContent>
+            </MenubarMenu>
+          )}
+        </Menubar>
+        <Dialog open={openDuplicateDialog}>
+          <DialogContent className="max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>Duplicate Plan</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              <div className="mb-5">
+                <Label className="mb-3 block">Name</Label>
+                <Input
+                  onChange={(e) => {
+                    setDuplicateName(e.target.value);
+                  }}
+                  value={duplicateName}
+                  type="text"
+                  placeholder="insert name"
+                />
+              </div>
+
+              <Button
+                onClick={() => {
+                  console.log(planManager.plan);
+                  insert(
+                    duplicateName,
+                    planManager.plan.datasourceId,
+                    planManager.plan.choosedSubjects,
+                  );
+                  setSimilarPlans(get(), planManager.plan.datasourceId);
+                  setOpenDuplicateDialog(false);
+                }}
+                className="inline-block mr-3"
+              >
+                Duplicate
+              </Button>
+              <Button
+                onClick={() => {
+                  setOpenDuplicateDialog(false);
+                }}
+                variant="secondary"
+              >
+                Cancel
+              </Button>
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+
+        <AlertDialog>
+          <AlertDialogTrigger ref={deleteAlertRef}></AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete this
+                datasource.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  remove(id);
+                  navigate("/");
+                }}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </section>
 
       <ScheduleTableApp
         choosed={choosed}

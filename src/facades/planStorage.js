@@ -3,6 +3,13 @@ import { getById as getDatasourceById } from "./datasourceStorage.js";
 import { UnchoosedSubjectEliminator } from "krsplan-engine";
 import LZString from "lz-string";
 
+const commit = (plans) => {
+  localStorage.setItem(
+    "KRSPLAN_PLAN",
+    LZString.compress(JSON.stringify(plans)),
+  );
+};
+
 export const insert = (name, datasourceId, choosedSubjects) => {
   const id = uuid();
   const date = new Date();
@@ -86,4 +93,12 @@ export const getById = (id) => {
   };
 
   return findPlan;
+};
+
+export const remove = (id) => {
+  const plans = get().filter((p) => {
+    return p.id !== id;
+  });
+
+  commit(plans);
 };
