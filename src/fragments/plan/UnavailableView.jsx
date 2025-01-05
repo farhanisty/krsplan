@@ -2,7 +2,6 @@ import SubjectItem from "@/components/SubjectItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const UnavailableView = ({ unavailable, subjects }) => {
-  console.log(unavailable);
   const unavailableSubjects = unavailable.map((u) => {
     return { subject: subjects[u.id - 1], reason: u.reason };
   });
