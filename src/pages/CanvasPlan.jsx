@@ -3,6 +3,7 @@ import RenderNonGrouped from "./../fragments/plan/renderer/RenderNonGrouped.jsx"
 import RenderByDay from "./../fragments/plan/renderer/RenderByDay.jsx";
 import RenderByLecturer from "./../fragments/plan/renderer/RenderByLecturer.jsx";
 import ChoosedRenderer from "./../fragments/plan/renderer/ChoosedRenderer.jsx";
+import UnavailableView from "./../fragments/plan/UnavailableView.jsx";
 import PlanManager from "./../facades/PlanManager.js";
 import {
   AlertDialog,
@@ -82,19 +83,21 @@ export default function CanvasPlan() {
   const [groupBy, setGroupBy] = useState("none");
   const [available, setAvailable] = useState(planManager.available);
   const [choosed, setChoosed] = useState(planManager.plan.data.choosed);
-  const [unavailable, setunavailable] = useState([]);
+  const [unavailable, setUnavailable] = useState(
+    planManager.plan.data.unavailable,
+  );
   const [duplicateName, setDuplicateName] = useState(
     `${planManager.plan.name} - copy`,
   );
 
   const deleteAlertRef = useRef(null);
-  const duplicateAlertRef = useRef(null);
 
   const chooseAction = (id) => {
     planManager.choose(id);
 
     setChoosed(planManager.choosed);
     setAvailable(planManager.available);
+    setUnavailable(planManager.unavailable);
   };
 
   const unchooseAction = (id) => {
@@ -102,6 +105,7 @@ export default function CanvasPlan() {
 
     setChoosed(planManager.choosed);
     setAvailable(planManager.available);
+    setUnavailable(planManager.unavailable);
   };
 
   return (
@@ -332,6 +336,13 @@ export default function CanvasPlan() {
             />
           )}
         </div>
+      </section>
+
+      <section className="mx-5 my-3 h-[100vh]">
+        <UnavailableView
+          unavailable={unavailable}
+          subjects={planManager.plan.datasource.datasource}
+        ></UnavailableView>
       </section>
     </SidebarLayout>
   );

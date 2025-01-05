@@ -45,7 +45,10 @@ export default class PlanManger {
       if (reason.length === 0) {
         newAvailable.push(aId);
       } else {
-        newUnavailable.push(aId);
+        newUnavailable.push({
+          id: aId,
+          reason: reason,
+        });
       }
     }
 
@@ -63,8 +66,6 @@ export default class PlanManger {
 
     const eligibleSubjects = [...this.unavailable];
 
-    console.log(eligibleSubjects, newChoosed);
-
     const newAvailable = [id, ...this.available];
     const newUnavailable = [];
 
@@ -73,12 +74,11 @@ export default class PlanManger {
     });
 
     for (const eId of eligibleSubjects) {
-      const subject = this.subjects[eId - 1];
+      const subject = this.subjects[eId.id - 1];
       let result = true;
+      const reason = [];
 
       for (const eliminator of eliminators) {
-        const reason = [];
-
         eliminator.execute(subject, reason);
 
         if (reason.length > 0) {
@@ -88,9 +88,12 @@ export default class PlanManger {
       }
 
       if (result) {
-        newAvailable.push(eId);
+        newAvailable.push(eId.id);
       } else {
-        newUnavailable.push(eId);
+        newUnavailable.push({
+          id: eId.id,
+          reason: reason,
+        });
       }
     }
 
