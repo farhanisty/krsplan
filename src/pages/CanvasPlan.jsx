@@ -61,7 +61,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineExport } from "react-icons/ai";
-import { remove, get, insert } from "./../facades/planStorage.js";
+import { remove, get, duplicate } from "./../facades/planStorage.js";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -194,12 +194,7 @@ export default function CanvasPlan() {
 
               <Button
                 onClick={() => {
-                  console.log(planManager.plan);
-                  insert(
-                    duplicateName,
-                    planManager.plan.datasourceId,
-                    planManager.plan.choosedSubjects,
-                  );
+                  duplicate(planManager.plan.id, duplicateName);
                   setSimilarPlans(get(), planManager.plan.datasourceId);
                   setOpenDuplicateDialog(false);
                 }}
