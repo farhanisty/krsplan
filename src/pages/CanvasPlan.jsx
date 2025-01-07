@@ -61,15 +61,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineExport } from "react-icons/ai";
-import { remove, get, insert } from "./../facades/planStorage.js";
+import { remove, get, duplicate } from "./../facades/planStorage.js";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-const getSimiliarPlans = (id, datasourceId) => {
-  return get().filter((p) => {
-    return p.datasourceId === datasourceId && p.id != id;
-  });
-};
 
 export default function CanvasPlan() {
   const { id } = useParams();
@@ -77,7 +71,7 @@ export default function CanvasPlan() {
   const navigate = useNavigate();
 
   const [similarPlans, setSimilarPlans] = useState(
-    getSimiliarPlans(id, planManager.plan.datasourceId),
+    planManager.getSimiliarPlans(),
   );
   const [openDuplicateDialog, setOpenDuplicateDialog] = useState(false);
   const [groupBy, setGroupBy] = useState("none");
@@ -194,12 +188,7 @@ export default function CanvasPlan() {
 
               <Button
                 onClick={() => {
-                  console.log(planManager.plan);
-                  insert(
-                    duplicateName,
-                    planManager.plan.datasourceId,
-                    planManager.plan.choosedSubjects,
-                  );
+                  duplicate(planManager.plan.id, duplicateName);
                   setSimilarPlans(get(), planManager.plan.datasourceId);
                   setOpenDuplicateDialog(false);
                 }}

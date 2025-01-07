@@ -102,3 +102,27 @@ export const remove = (id) => {
 
   commit(plans);
 };
+
+export const duplicate = (id, name) => {
+  const plan = getById(id);
+
+  const newId = uuid();
+  const date = new Date();
+
+  const result = {
+    id: newId,
+    createdAt: date.toLocaleString(),
+    name,
+    datasourceId: plan.datasourceId,
+    choosedSubjects: plan.choosedSubjects,
+    data: {
+      choosed: plan.data.choosed,
+      available: plan.data.available,
+      unavailable: plan.data.unavailable,
+    },
+  };
+
+  const plans = [result, ...get()];
+
+  commit(plans);
+};
