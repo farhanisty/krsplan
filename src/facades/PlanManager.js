@@ -1,4 +1,4 @@
-import { getById, update } from "./planStorage.js";
+import { getById, update, get } from "./planStorage.js";
 import { getEligibleSubjects } from "./../facades/planUtil.js";
 import {
   ChoosedSubjectEliminator,
@@ -12,6 +12,7 @@ export default class PlanManger {
   choosed;
   available;
   unavailable;
+  similiarPlans = null;
 
   constructor(planId) {
     this.plan = getById(planId);
@@ -134,6 +135,18 @@ export default class PlanManger {
     choosedSubjectEliminator.setNext(overlapTimeEliminator);
 
     return choosedSubjectEliminator;
+  }
+
+  getSimiliarPlans() {
+    if (this.similiarPlans === null) {
+      this.similiarPlans = get().filter((p) => {
+        return (
+          p.datasourceId === this.plan.datasourceId && p.id != this.plan.id
+        );
+      });
+    }
+
+    return this.similiarPlans;
   }
 
   commit() {

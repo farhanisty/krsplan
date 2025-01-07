@@ -65,19 +65,13 @@ import { remove, get, duplicate } from "./../facades/planStorage.js";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const getSimiliarPlans = (id, datasourceId) => {
-  return get().filter((p) => {
-    return p.datasourceId === datasourceId && p.id != id;
-  });
-};
-
 export default function CanvasPlan() {
   const { id } = useParams();
   const planManager = new PlanManager(id);
   const navigate = useNavigate();
 
   const [similarPlans, setSimilarPlans] = useState(
-    getSimiliarPlans(id, planManager.plan.datasourceId),
+    planManager.getSimiliarPlans(),
   );
   const [openDuplicateDialog, setOpenDuplicateDialog] = useState(false);
   const [groupBy, setGroupBy] = useState("none");
