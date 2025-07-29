@@ -56,7 +56,7 @@ export default function ScheduleTableApp({ choosed, subjects }) {
                       top={convertTop(subject)}
                     >
                       <ScheduleTable.SubjectItem.Name>
-                        {subject.name}
+                        {subject.name} ({subject.className})
                       </ScheduleTable.SubjectItem.Name>
                       <ScheduleTable.SubjectItem.Time>
                         {stringifySchedule(subject.schedule)} ({subject.credits}{" "}

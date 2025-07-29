@@ -29,8 +29,8 @@ export default function CreateDatasource({ updateDatasourceState }) {
   const nameRef = useRef(null);
   const dataRef = useRef(null);
   const dialogTriggerRef = useRef(null);
+  
   const [datasources, setDatasources] = useState([]);
-
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
@@ -56,6 +56,7 @@ export default function CreateDatasource({ updateDatasourceState }) {
     nameRef.current.value = "";
     dataRef.current.value = "";
     updateDatasourceState(get());
+    dialogTriggerRef.current.click();
   };
 
   return (

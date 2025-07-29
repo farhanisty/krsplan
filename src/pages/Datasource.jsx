@@ -6,7 +6,6 @@ import { useState, useRef } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -24,7 +23,6 @@ import { NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { stringify, parse } from "flatted";
 
 export default function Datasource() {
   const localStorageDatasources = get();

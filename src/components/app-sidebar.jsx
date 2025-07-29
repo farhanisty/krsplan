@@ -11,8 +11,7 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { NavLink } from "react-router-dom";
-import { CiDatabase } from "react-icons/ci";
-import { GrPlan } from "react-icons/gr";
+import { CiDatabase, CiMonitor } from "react-icons/ci";
 import { BiTask } from "react-icons/bi";
 
 export function AppSidebar({ activePage }) {
@@ -44,6 +43,18 @@ export function AppSidebar({ activePage }) {
                   >
                     <CiDatabase />
                     Datasource
+                  </SidebarMenuButton>
+                </NavLink>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <NavLink to="/view">
+                  <SidebarMenuButton
+                    isActive={activePage === "view" ? true : false}
+                  >
+                    <CiMonitor />
+                    View
                   </SidebarMenuButton>
                 </NavLink>
               </SidebarMenuItem>

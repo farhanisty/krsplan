@@ -2,7 +2,6 @@ import SidebarLayout from "./../layout/SidebarLayout.jsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
