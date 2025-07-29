@@ -6,11 +6,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { getById } from "../facades/planStorage.js"; 
 import ViewManager from "@/facades/ViewManager.js";
 import ScheduleTableApp from "@/fragments/plan/ScheduleTableApp.jsx";
+import { FaArrowRight } from "react-icons/fa6";
 
 export default function ViewPlans() {
   const { id } = useParams();
@@ -51,10 +53,19 @@ export default function ViewPlans() {
           <ul className="space-y-4">
             {allPlans.map((plan) => (
               <li key={plan.id} className="p-4 border rounded-md shadow-sm">
-                <h3 className="text-lg font-medium">{plan.name}</h3>
-                <p className="text-sm text-gray-600">
-                  Created At: {plan.createdAt}
-                </p>
+                <div className="flex justify-between mb-5">
+                  <div>
+                    <h3 className="text-lg font-medium">{plan.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      Created At: {plan.createdAt}
+                    </p>
+                  </div>
+                  <div>
+                    <NavLink to={`/plan/${plan.id}`}>
+                      <Button>Go To Plan <FaArrowRight /></Button>
+                    </NavLink>
+                  </div>
+                </div>
                 <ScheduleTableApp choosed={plan.data.choosed} subjects={plan.datasource.datasource}/>
               </li>
             ))}
