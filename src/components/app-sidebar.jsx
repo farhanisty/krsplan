@@ -63,7 +63,7 @@ export function AppSidebar({ activePage }) {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter className="text-sm text-right">v 1.0.0</SidebarFooter>
+      <SidebarFooter className="text-sm text-right">v 1.1.1</SidebarFooter>
     </Sidebar>
   );
 }

@@ -53,7 +53,7 @@ export default function ViewPlans() {
               <li key={plan.id} className="p-4 border rounded-md shadow-sm">
                 <h3 className="text-lg font-medium">{plan.name}</h3>
                 <p className="text-sm text-gray-600">
-                  Dibuat pada: {plan.createdAt}
+                  Created At: {plan.createdAt}
                 </p>
                 <ScheduleTableApp choosed={plan.data.choosed} subjects={plan.datasource.datasource}/>
               </li>

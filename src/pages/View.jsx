@@ -50,9 +50,7 @@ export default function View() {
             <DatasourceLayout.Header>All</DatasourceLayout.Header>
             <DatasourceLayout.Body>
               {allViews.length === 0 ? (
-                <h1 className="text-center text-gray-500">
-                  Tidak ada view tersedia. Buat satu dulu!
-                </h1>
+                <h1 className="text-center text-gray-500">No views available, create one first!</h1>
               ) : (
                 <ul className="space-y-3">
                   {allViews.map((view) => (
