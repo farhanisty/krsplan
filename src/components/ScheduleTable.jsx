@@ -19,9 +19,9 @@ const ScheduleTable = ({ children }) => {
     <section>
       <div className="relative mx-5">
         <ul className="relative pt-[30px]">
-          {times.map((time) => {
+          {times.map((time, index) => {
             return (
-              <li key={time} className="h-[40px] flex gap-3 items-center group">
+              <li key={index} className="h-[40px] flex gap-3 items-center group">
                 <time className="text-timelabel group-hover:text-red-600 group-hover:scale-125 cursor-pointer group-hover:font-semibold">
                   {time}
                 </time>

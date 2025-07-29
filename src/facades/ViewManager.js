@@ -6,7 +6,6 @@ export default class ViewManager {
 
   constructor(viewId) {
     this.view = getViewById(viewId);
-    console.log(this.view);
 
     this.planIds = this.view.planIds;
   }
