@@ -80,7 +80,6 @@ export const get = () => {
     localStorageData = [];
   }
 
-  console.log(localStorageData)
 
   return localStorageData;
 };
