@@ -79,6 +79,9 @@ export const get = () => {
   } else {
     localStorageData = [];
   }
+
+  console.log(localStorageData)
+
   return localStorageData;
 };
 

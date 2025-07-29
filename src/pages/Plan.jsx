@@ -13,6 +13,8 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { get } from "./../facades/planStorage.js";
 import { MdNavigateNext } from "react-icons/md";
+import { CiCalendar, CiPlane } from "react-icons/ci";
+import { BiTask } from "react-icons/bi";
 
 export default function Plan() {
   const [plans, setPlans] = useState([]);
@@ -49,7 +51,7 @@ export default function Plan() {
               {plans.length === 0 ? (
                 <h1 className="text-center">Plan is empty!</h1>
               ) : (
-                <ul>
+                <ul className="mt-5 flex flex-col gap-3">
                   {plans.map((plan) => {
                     return (
                       <li
@@ -57,8 +59,19 @@ export default function Plan() {
                         key={plan.id}
                       >
                         <div>
-                          <h1>{plan.name}</h1>
-                          <h2>Created At: {plan.createdAt}</h2>
+                          <label
+                            htmlFor={`plan-${plan.id}`}
+                            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            <h1 className="text-gray-700">
+                              <BiTask className="inline mr-1"/> 
+
+                              {plan.name}
+                            </h1>
+                            <time className="text-sm text-slate-400 mt-2 block flex items-center gap-3">
+                              <CiCalendar /> Created At: {plan.createdAt}
+                            </time>
+                          </label>
                         </div>
                         <NavLink to={`/plan/${plan.id}`}>
                           <button className="hover:bg-slate-300 w-[40px] h-[40px] rounded-full bg-slate-200 flex justify-center items-center">
