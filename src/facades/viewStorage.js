@@ -13,9 +13,6 @@ export const get = () => {
     try {
       localStorageData = JSON.parse(LZString.decompress(localStorageData));
     } catch (e) {
-      console.error(
-        e,
-      );
       localStorageData = []; 
     }
   } else {
@@ -39,7 +36,6 @@ export const insert = (name, planIds) => {
   views = [newView, ...views]; 
 
   commitViews(views); 
-  console.log("View baru berhasil disimpan:", newView);
 };
 
 export const getViewById = (id) => {
@@ -54,9 +50,7 @@ export const updateView = (id, updatedViewData) => {
   if (viewIndex > -1) {
     views[viewIndex] = { ...views[viewIndex], ...updatedViewData };
     commitViews(views);
-    console.log("View berhasil diperbarui:", views[viewIndex]);
   } else {
-    console.warn(`View dengan ID ${id} tidak ditemukan untuk diperbarui.`);
   }
 };
 
@@ -64,5 +58,4 @@ export const updateView = (id, updatedViewData) => {
 export const removeView = (id) => {
   const views = get().filter((view) => view.id !== id);
   commitViews(views);
-  console.log(`View dengan ID ${id} berhasil dihapus.`);
 };
